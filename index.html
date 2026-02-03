@@ -10,7 +10,6 @@ body {
   background: #eef6fb;
   padding: 15px;
   margin: 0;
-  overflow-y: auto;
 }
 h1 {
   text-align: center;
@@ -39,6 +38,13 @@ a.btn {
 a.jma-btn {
   background: #555;
 }
+.weather {
+  margin-top: 10px;
+  font-size: 14px;
+  background: #f4f8fb;
+  padding: 8px;
+  border-radius: 6px;
+}
 </style>
 </head>
 
@@ -50,9 +56,82 @@ a.jma-btn {
 <div class="card">
   <h2>白馬八方尾根（長野県北部）</h2>
   <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png" alt="">
+  <div class="weather" data-weather>天気取得中…</div>
   <a class="btn" href="https://www.happo-one.jp/livecam/" target="_blank">
     ▶ 公式ライブカメラを見る
   </a>
   <a class="btn jma-btn"
      href="https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000"
-     target
+     target="_blank">
+    🌤 気象庁の詳細な天気を見る
+  </a>
+</div>
+
+<!-- 白馬五竜 -->
+<div class="card">
+  <h2>白馬五竜（長野県北部）</h2>
+  <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png" alt="">
+  <div class="weather" data-weather>天気取得中…</div>
+  <a class="btn" href="https://www.hakubaescal.com/winter/livecamera/" target="_blank">
+    ▶ 公式ライブカメラを見る
+  </a>
+  <a class="btn jma-btn"
+     href="https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000"
+     target="_blank">
+    🌤 気象庁の詳細な天気を見る
+  </a>
+</div>
+
+<!-- 栂池高原 -->
+<div class="card">
+  <h2>栂池高原（長野県北部）</h2>
+  <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png" alt="">
+  <div class="weather" data-weather>天気取得中…</div>
+  <a class="btn" href="https://www.tsugaike.gr.jp/gelande/livecamera/" target="_blank">
+    ▶ 公式ライブカメラを見る
+  </a>
+  <a class="btn jma-btn"
+     href="https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000"
+     target="_blank">
+    🌤 気象庁の詳細な天気を見る
+  </a>
+</div>
+
+<!-- 野沢温泉 -->
+<div class="card">
+  <h2>野沢温泉スキー場（長野県北部）</h2>
+  <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png" alt="">
+  <div class="weather" data-weather>天気取得中…</div>
+  <a class="btn" href="https://nozawaski.com/livecam/" target="_blank">
+    ▶ 公式ライブカメラを見る
+  </a>
+  <a class="btn jma-btn"
+     href="https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000"
+     target="_blank">
+    🌤 気象庁の詳細な天気を見る
+  </a>
+</div>
+
+<script>
+// 気象庁API（長野県）
+fetch("https://www.jma.go.jp/bosai/forecast/data/forecast/200000.json")
+  .then(res => res.json())
+  .then(data => {
+    const area = data[0].timeSeries[0].areas[0];
+    const text =
+      `今日：${area.weathers[0]} ／ 明日：${area.weathers[1]}`;
+
+    // すべてのゲレンデに同じ地域天気を表示
+    document.querySelectorAll("[data-weather]").forEach(el => {
+      el.textContent = text;
+    });
+  })
+  .catch(() => {
+    document.querySelectorAll("[data-weather]").forEach(el => {
+      el.textContent = "天気情報を取得できませんでした";
+    });
+  });
+</script>
+
+</body>
+</html>
