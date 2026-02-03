@@ -2,34 +2,56 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>カウンターアプリ</title>
+  <title>逃げるボタン</title>
   <style>
     body {
+      height: 100vh;
+      margin: 0;
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
       font-family: sans-serif;
-      text-align: center;
-      margin-top: 50px;
     }
-    button {
+
+    #runaway {
+      position: absolute;
+      padding: 15px 30px;
       font-size: 18px;
-      padding: 10px 20px;
+      border: none;
+      border-radius: 30px;
+      background: hotpink;
+      color: white;
+      cursor: pointer;
+      transition: 0.1s;
     }
   </style>
 </head>
 <body>
 
-  <h1>カウンター</h1>
-  <p id="count">0</p>
-  <button onclick="countUp()">+1</button>
+  <button id="runaway">押せるもんなら押してみな😏</button>
 
   <script>
-    let count = 0;
+    const button = document.getElementById("runaway");
 
-    function countUp() {
-      count++;
-      document.getElementById("count").textContent = count;
-    }
+    button.addEventListener("mouseenter", () => {
+      const maxX = window.innerWidth - button.offsetWidth;
+      const maxY = window.innerHeight - button.offsetHeight;
+
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+
+      button.style.left = randomX + "px";
+      button.style.top = randomY + "px";
+    });
+
+    button.addEventListener("click", () => {
+      alert("え、押せたの！？😳");
+    });
   </script>
 
 </body>
 </html>
+
 
