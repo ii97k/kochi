@@ -10,26 +10,22 @@ body {
   background: #eef6fb;
   padding: 15px;
   margin: 0;
-  overflow-y: auto;   /* ← スクロール有効 */
+  overflow-y: auto;
 }
-
 h1 {
   text-align: center;
 }
-
 .card {
   background: #fff;
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 15px;
 }
-
 img {
   width: 100%;
   border-radius: 6px;
   border: 1px solid #ccc;
 }
-
 a.btn {
   display: block;
   margin-top: 8px;
@@ -40,25 +36,8 @@ a.btn {
   text-decoration: none;
   border-radius: 6px;
 }
-
-.weather {
-  margin-top: 10px;
-  font-size: 14px;
-}
-
-/* 画面下固定の気象庁ボタン */
-.fixed-btn {
-  position: fixed;
-  bottom: 15px;
-  left: 15px;
-  right: 15px;
+a.jma-btn {
   background: #555;
-  color: #fff;
-  text-align: center;
-  padding: 12px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
 }
 </style>
 </head>
@@ -67,44 +46,22 @@ a.btn {
 
 <h1>🎿 ゲレンデ状況確認</h1>
 
+<!-- 白馬八方尾根（長野県北部） -->
 <div class="card">
   <h2>白馬八方尾根</h2>
   <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png" alt="">
   <a class="btn" href="https://www.happo-one.jp/livecam/" target="_blank">
     ▶ 公式ライブカメラを見る
   </a>
+  <a class="btn jma-btn"
+     href="https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000"
+     target="_blank">
+    🌤 気象庁（長野県）の天気
+  </a>
 </div>
 
+<!-- 白馬五竜（長野県北部） -->
 <div class="card">
   <h2>白馬五竜</h2>
   <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png" alt="">
-  <a class="btn" href="https://www.hakubaescal.com/winter/livecamera/" target="_blank">
-    ▶ 公式ライブカメラを見る
-  </a>
-</div>
-
-<div class="card">
-  <h2>栂池高原</h2>
-  <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png" alt="">
-  <a class="btn" href="https://www.tsugaike.gr.jp/gelande/livecamera/" target="_blank">
-    ▶ 公式ライブカメラを見る
-  </a>
-</div>
-
-<div class="card">
-  <h2>野沢温泉スキー場</h2>
-  <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png" alt="">
-  <a class="btn" href="https://nozawaski.com/livecam/" target="_blank">
-    ▶ 公式ライブカメラを見る
-  </a>
-</div>
-
-<div class="card">
-  <h2>🌤 長野県の天気（気象庁）</h2>
-  <div class="weather" id="weather">天気取得中…</div>
-</div>
-
-<!-- 画面下に常に表示される気象庁ボタン -->
-<a class="fixed-btn"
-   href="https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000"
-   target="_blank">
+  <a class="btn" href="https://www.haku
