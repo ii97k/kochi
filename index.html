@@ -2,11 +2,11 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ゲレンデライブ × 気象庁</title>
+  <title>ゲレンデ × 気象庁</title>
   <style>
     body {
       font-family: sans-serif;
-      background: #eef2f5;
+      background: #f2f5f7;
       padding: 15px;
     }
     h1 {
@@ -20,14 +20,24 @@
     }
     iframe {
       width: 100%;
-      height: 250px;
+      height: 240px;
       border: none;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
-    .box {
+    .weather {
       background: white;
-      padding: 15px;
+      padding: 12px;
       border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    a {
+      display: block;
+      text-align: center;
+      padding: 10px;
+      background: #0066cc;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
     }
   </style>
 </head>
@@ -39,28 +49,35 @@
   <option value="">ゲレンデを選択</option>
   <option value="hakuba">白馬八方尾根</option>
   <option value="naeba">苗場</option>
-  <option value="niseko">ニセコ</option>
+  <option value="katsuyama">スキージャム勝山</option>
 </select>
 
 <iframe id="live"></iframe>
 
-<div class="box" id="weather">
-  ゲレンデを選択してください
+<div class="weather" id="weather">
+  天気情報が表示されます
 </div>
+
+<a id="jmaLink" href="#" target="_blank">
+  気象庁の詳細を見る
+</a>
 
 <script>
 const resorts = {
   hakuba: {
-    video: "https://www.youtube.com/embed/VIDEO_ID",
-    code: "200000"
+    video: "https://www.youtube.com/embed/21X5lGlDOfg",
+    code: "200000",
+    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000"
   },
   naeba: {
-    video: "https://www.youtube.com/embed/VIDEO_ID",
-    code: "150000"
+    video: "https://www.youtube.com/embed/21X5lGlDOfg",
+    code: "150000",
+    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=150000"
   },
-  niseko: {
-    video: "https://www.youtube.com/embed/VIDEO_ID",
-    code: "016000"
+  katsuyama: {
+    video: "https://www.youtube.com/embed/drTCMJhgpSI",
+    code: "180000",
+    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=180000"
   }
 };
 
@@ -69,16 +86,22 @@ function update() {
   if (!key) return;
 
   const r = resorts[key];
+
+  // ライブ動画
   document.getElementById("live").src = r.video;
 
+  // 気象庁リンク
+  document.getElementById("jmaLink").href = r.jma;
+
+  // 天気（超要約）
   fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${r.code}.json`)
     .then(res => res.json())
     .then(data => {
       const area = data[0].timeSeries[0].areas[0];
       document.getElementById("weather").innerHTML = `
-        <h2>${area.area.name}</h2>
-        <p><strong>今日：</strong>${area.weathers[0]}</p>
-        <p><strong>明日：</strong>${area.weathers[1]}</p>
+        <strong>${area.area.name}</strong><br>
+        今日：${area.weathers[0]}<br>
+        明日：${area.weathers[1]}
       `;
     });
 }
@@ -86,5 +109,3 @@ function update() {
 
 </body>
 </html>
-
-
