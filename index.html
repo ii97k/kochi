@@ -2,54 +2,87 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>逃げるボタン</title>
+  <title>ゲレンデライブ × 気象庁</title>
   <style>
     body {
-      height: 100vh;
-      margin: 0;
-      background: #111;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
       font-family: sans-serif;
+      background: #eef2f5;
+      padding: 15px;
     }
-
-    #runaway {
-      position: absolute;
-      padding: 15px 30px;
-      font-size: 18px;
+    h1 {
+      text-align: center;
+    }
+    select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    iframe {
+      width: 100%;
+      height: 250px;
       border: none;
-      border-radius: 30px;
-      background: hotpink;
-      color: white;
-      cursor: pointer;
-      transition: 0.1s;
+      margin-bottom: 15px;
+    }
+    .box {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
 
-  <button id="runaway">押せるもんなら押してみな😏</button>
+<h1>🎿 ゲレンデ状況確認</h1>
 
-  <script>
-    const button = document.getElementById("runaway");
+<select id="resort" onchange="update()">
+  <option value="">ゲレンデを選択</option>
+  <option value="hakuba">白馬八方尾根</option>
+  <option value="naeba">苗場</option>
+  <option value="niseko">ニセコ</option>
+</select>
 
-    button.addEventListener("mouseenter", () => {
-      const maxX = window.innerWidth - button.offsetWidth;
-      const maxY = window.innerHeight - button.offsetHeight;
+<iframe id="live"></iframe>
 
-      const randomX = Math.random() * maxX;
-      const randomY = Math.random() * maxY;
+<div class="box" id="weather">
+  ゲレンデを選択してください
+</div>
 
-      button.style.left = randomX + "px";
-      button.style.top = randomY + "px";
+<script>
+const resorts = {
+  hakuba: {
+    video: "https://www.youtube.com/embed/VIDEO_ID",
+    code: "200000"
+  },
+  naeba: {
+    video: "https://www.youtube.com/embed/VIDEO_ID",
+    code: "150000"
+  },
+  niseko: {
+    video: "https://www.youtube.com/embed/VIDEO_ID",
+    code: "016000"
+  }
+};
+
+function update() {
+  const key = document.getElementById("resort").value;
+  if (!key) return;
+
+  const r = resorts[key];
+  document.getElementById("live").src = r.video;
+
+  fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${r.code}.json`)
+    .then(res => res.json())
+    .then(data => {
+      const area = data[0].timeSeries[0].areas[0];
+      document.getElementById("weather").innerHTML = `
+        <h2>${area.area.name}</h2>
+        <p><strong>今日：</strong>${area.weathers[0]}</p>
+        <p><strong>明日：</strong>${area.weathers[1]}</p>
+      `;
     });
-
-    button.addEventListener("click", () => {
-      alert("え、押せたの！？😳");
-    });
-  </script>
+}
+</script>
 
 </body>
 </html>
