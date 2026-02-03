@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>全国 海ライブ × 気象庁</title>
+<title>海ライブ × 気象庁</title>
 <style>
 body {
   font-family: sans-serif;
@@ -20,13 +20,13 @@ iframe {
   width: 100%;
   height: 240px;
   border: none;
-  margin-bottom: 10px;
 }
+.hidden { display: none; }
 .weather {
-  background: white;
+  background: #fff;
   padding: 12px;
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin: 10px 0;
 }
 .btn {
   display: block;
@@ -36,118 +36,105 @@ iframe {
   color: white;
   text-decoration: none;
   border-radius: 6px;
+  margin-top: 10px;
   font-weight: bold;
 }
-.note {
-  font-size: 12px;
-  color: #555;
-  margin-top: 6px;
+.warn {
   text-align: center;
+  font-size: 13px;
+  color: #555;
 }
 </style>
 </head>
 <body>
 
-<h1>🌊 全国 海ライブカメラ</h1>
+<h1>🌊 海のライブカメラ</h1>
 
 <select id="spot" onchange="update()">
-<option value="">海を選択</option>
-<option value="otaru">小樽港（北海道）</option>
-<option value="kamakura">鎌倉・由比ヶ浜</option>
-<option value="enoshima">江ノ島</option>
-<option value="shimoda">伊豆・下田</option>
-<option value="niigata">新潟港</option>
-<option value="tottori">鳥取砂丘</option>
-<option value="awaji">淡路島</option>
-<option value="katsurahama">桂浜（高知）</option>
-<option value="shikanoshima">志賀島（福岡）</option>
-<option value="naha">那覇港（沖縄）</option>
+  <option value="">海を選択</option>
+  <option value="shirarahama">白良浜（和歌山）</option>
+  <option value="aoshima">青島海岸（宮崎）</option>
+  <option value="tottori">鳥取砂丘</option>
 </select>
 
-<iframe id="live"></iframe>
+<iframe
+  id="live"
+  allow="accelerometer; autoplay; encrypted-media; picture-in-picture"
+  allowfullscreen>
+</iframe>
+
+<a id="youtubeBtn" class="btn hidden" target="_blank">
+▶ YouTubeで見る
+</a>
 
 <div class="weather" id="weather">
 天気情報が表示されます
 </div>
 
-<a id="jmaLink" class="btn" href="#" target="_blank">
-🌤 気象庁の詳細予報を見る
+<a id="jmaLink" class="btn" target="_blank">
+🌤 気象庁の詳細を見る
 </a>
 
-<div class="note">
-※警報・注意報・津波情報は必ず気象庁公式で確認してください
-</div>
+<p class="warn">
+※動画が再生できない場合は自動でYouTubeに切り替わります
+</p>
 
 <script>
 const spots = {
-  otaru: {
-    video: "https://www.youtube.com/embed/21X5lGlDOfg",
-    code: "016000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=016000"
+  shirarahama: {
+    embed: "https://www.youtube.com/embed/drTCMJhgpSI",
+    watch: "https://www.youtube.com/watch?v=drTCMJhgpSI",
+    code: "300000",
+    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=300000"
   },
-  kamakura: {
-    video: "https://www.youtube.com/embed/21X5lGlDOfg",
-    code: "140000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=140000"
-  },
-  enoshima: {
-    video: "https://www.youtube.com/embed/5qap5aO4i9A",
-    code: "140000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=140000"
-  },
-  shimoda: {
-    video: "https://www.youtube.com/embed/drTCMJhgpSI",
-    code: "220000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=220000"
-  },
-  niigata: {
-    video: "https://www.youtube.com/embed/21X5lGlDOfg",
-    code: "150000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=150000"
+  aoshima: {
+    embed: "https://www.youtube.com/embed/6zQ1ZzqzF3I",
+    watch: "https://www.youtube.com/watch?v=6zQ1ZzqzF3I",
+    code: "450000",
+    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=450000"
   },
   tottori: {
-    video: "https://www.youtube.com/embed/drTCMJhgpSI",
+    embed: "https://www.youtube.com/embed/V0xZKZpGQ2M",
+    watch: "https://www.youtube.com/watch?v=V0xZKZpGQ2M",
     code: "310000",
     jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=310000"
-  },
-  awaji: {
-    video: "https://www.youtube.com/embed/6zQ1ZzqzF3I",
-    code: "280000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=280000"
-  },
-  katsurahama: {
-    video: "https://www.youtube.com/embed/6zQ1ZzqzF3I",
-    code: "390000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=390000"
-  },
-  shikanoshima: {
-    video: "https://www.youtube.com/embed/5qap5aO4i9A",
-    code: "400000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=400000"
-  },
-  naha: {
-    video: "https://www.youtube.com/embed/21X5lGlDOfg",
-    code: "471000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=471000"
   }
 };
 
+let timer;
+
 function update() {
+  clearTimeout(timer);
+
   const key = document.getElementById("spot").value;
   if (!key) return;
 
   const s = spots[key];
-  document.getElementById("live").src = s.video;
+  const iframe = document.getElementById("live");
+  const ytBtn = document.getElementById("youtubeBtn");
+
+  iframe.src = s.embed;
+  iframe.classList.remove("hidden");
+
+  ytBtn.href = s.watch;
+  ytBtn.classList.add("hidden");
+
   document.getElementById("jmaLink").href = s.jma;
 
+  // 5秒後に再生できなければYouTubeに切り替え
+  timer = setTimeout(() => {
+    iframe.classList.add("hidden");
+    ytBtn.classList.remove("hidden");
+  }, 5000);
+
   fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${s.code}.json`)
-    .then(res => res.json())
+    .then(r => r.json())
     .then(data => {
-      const area = data[0].timeSeries[0].areas[0];
+      const a = data[0].timeSeries[0].areas[0];
       document.getElementById("weather").innerHTML = `
-        <strong>${area.area.name}</strong><br>
-        今日：${area.weathers[0]}<br>
-        明日：${area.weathers[1]}
+        <strong>${a.area.name}</strong><br>
+        今日：${a.weathers[0]}<br>
+        明日：${a.weathers[1]}
       `;
     });
 }
