@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>海ライブ × 気象庁</title>
+<title>ゲレンデライブ × 気象庁</title>
 <style>
 body {
   font-family: sans-serif;
@@ -14,16 +14,16 @@ select {
   width: 100%;
   padding: 10px;
   font-size: 16px;
-  margin-bottom: 10px;
 }
 iframe {
   width: 100%;
   height: 240px;
   border: none;
+  margin-top: 10px;
 }
 .hidden { display: none; }
 .weather {
-  background: #fff;
+  background: white;
   padding: 12px;
   border-radius: 8px;
   margin: 10px 0;
@@ -36,25 +36,26 @@ iframe {
   color: white;
   text-decoration: none;
   border-radius: 6px;
-  margin-top: 10px;
   font-weight: bold;
 }
-.warn {
+.note {
+  font-size: 12px;
   text-align: center;
-  font-size: 13px;
   color: #555;
 }
 </style>
 </head>
 <body>
 
-<h1>🌊 海のライブカメラ</h1>
+<h1>🎿 全国 ゲレンデライブ</h1>
 
 <select id="spot" onchange="update()">
-  <option value="">海を選択</option>
-  <option value="shirarahama">白良浜（和歌山）</option>
-  <option value="aoshima">青島海岸（宮崎）</option>
-  <option value="tottori">鳥取砂丘</option>
+  <option value="">ゲレンデを選択</option>
+  <option value="sapporo">札幌国際スキー場</option>
+  <option value="naeba">苗場スキー場</option>
+  <option value="hakuba">白馬八方尾根</option>
+  <option value="shiga">志賀高原</option>
+  <option value="zao">蔵王温泉スキー場</option>
 </select>
 
 <iframe
@@ -75,29 +76,41 @@ iframe {
 🌤 気象庁の詳細を見る
 </a>
 
-<p class="warn">
+<p class="note">
 ※動画が再生できない場合は自動でYouTubeに切り替わります
 </p>
 
 <script>
 const spots = {
-  shirarahama: {
-    embed: "https://www.youtube.com/embed/drTCMJhgpSI",
-    watch: "https://www.youtube.com/watch?v=drTCMJhgpSI",
-    code: "300000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=300000"
+  sapporo: {
+    embed: "https://www.youtube.com/embed/t6xH1gWQF6k",
+    watch: "https://www.youtube.com/watch?v=t6xH1gWQF6k",
+    code: "016000",
+    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=016000"
   },
-  aoshima: {
-    embed: "https://www.youtube.com/embed/6zQ1ZzqzF3I",
-    watch: "https://www.youtube.com/watch?v=6zQ1ZzqzF3I",
-    code: "450000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=450000"
+  naeba: {
+    embed: "https://www.youtube.com/embed/ZpZK8K2pD9M",
+    watch: "https://www.youtube.com/watch?v=ZpZK8K2pD9M",
+    code: "150000",
+    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=150000"
   },
-  tottori: {
-    embed: "https://www.youtube.com/embed/V0xZKZpGQ2M",
-    watch: "https://www.youtube.com/watch?v=V0xZKZpGQ2M",
-    code: "310000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=310000"
+  hakuba: {
+    embed: "https://www.youtube.com/embed/0W7XGfXK0xA",
+    watch: "https://www.youtube.com/watch?v=0W7XGfXK0xA",
+    code: "200000",
+    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000"
+  },
+  shiga: {
+    embed: "https://www.youtube.com/embed/3m7uFhYdC3M",
+    watch: "https://www.youtube.com/watch?v=3m7uFhYdC3M",
+    code: "200000",
+    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000"
+  },
+  zao: {
+    embed: "https://www.youtube.com/embed/VK6Pz8LZr5M",
+    watch: "https://www.youtube.com/watch?v=VK6Pz8LZr5M",
+    code: "060000",
+    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=060000"
   }
 };
 
@@ -105,26 +118,25 @@ let timer;
 
 function update() {
   clearTimeout(timer);
-
   const key = document.getElementById("spot").value;
   if (!key) return;
 
   const s = spots[key];
   const iframe = document.getElementById("live");
-  const ytBtn = document.getElementById("youtubeBtn");
+  const yt = document.getElementById("youtubeBtn");
 
   iframe.src = s.embed;
   iframe.classList.remove("hidden");
 
-  ytBtn.href = s.watch;
-  ytBtn.classList.add("hidden");
+  yt.href = s.watch;
+  yt.classList.add("hidden");
 
   document.getElementById("jmaLink").href = s.jma;
 
-  // 5秒後に再生できなければYouTubeに切り替え
+  // 5秒後に再生できなければYouTubeへ
   timer = setTimeout(() => {
     iframe.classList.add("hidden");
-    ytBtn.classList.remove("hidden");
+    yt.classList.remove("hidden");
   }, 5000);
 
   fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${s.code}.json`)
