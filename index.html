@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>公式ゲレンデライブ × 気象庁</title>
+<title>ゲレンデ状況 × 気象庁</title>
 <style>
 body {
   font-family: sans-serif;
@@ -10,119 +10,67 @@ body {
   padding: 15px;
 }
 h1 { text-align: center; }
-select {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  margin-bottom: 10px;
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 15px;
 }
 img {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid #ccc;
 }
-.weather {
-  background: #fff;
-  padding: 12px;
-  border-radius: 8px;
-  margin: 10px 0;
-}
-.btn {
+a.btn {
   display: block;
+  margin-top: 8px;
   text-align: center;
-  padding: 12px;
+  padding: 10px;
   background: #0077cc;
-  color: white;
+  color: #fff;
   text-decoration: none;
   border-radius: 6px;
-  font-weight: bold;
-  margin-top: 10px;
 }
-.note {
-  font-size: 12px;
-  text-align: center;
-  color: #555;
+.weather {
+  margin-top: 10px;
+  font-size: 14px;
 }
 </style>
 </head>
 <body>
 
-<h1>🎿 公式ゲレンデライブ</h1>
+<h1>🎿 ゲレンデ状況確認</h1>
 
-<select id="spot" onchange="update()">
-  <option value="">ゲレンデを選択</option>
-  <option value="sapporo">札幌国際スキー場</option>
-  <option value="naeba">苗場スキー場</option>
-  <option value="hakuba">白馬八方尾根</option>
-  <option value="zao">蔵王温泉スキー場</option>
-</select>
+<div class="card">
+  <h2>白馬八方尾根</h2>
 
-<img id="cam" alt="ゲレンデライブカメラ">
+  <!-- 代替画像 -->
+  <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png"
+       alt="ライブカメラ（公式サイトで確認）">
 
-<div class="weather" id="weather">
-天気情報が表示されます
+  <a class="btn" href="https://www.happo-one.jp/livecam/" target="_blank">
+    ▶ 公式ライブカメラを見る
+  </a>
+
+  <div class="weather" id="weather">
+    天気取得中…
+  </div>
+
+  <a class="btn" style="background:#555"
+     href="https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000"
+     target="_blank">
+    🌤 気象庁の詳細を見る
+  </a>
 </div>
 
-<a id="jmaLink" class="btn" target="_blank">
-🌤 気象庁の詳細を見る
-</a>
-
-<p class="note">
-※公式ライブカメラ（数秒ごとに更新されます）
-</p>
-
 <script>
-const spots = {
-  sapporo: {
-    cam: "https://www.sapporo-kokusai.jp/livecamera/camera1.jpg",
-    code: "016000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=016000"
-  },
-  naeba: {
-    cam: "https://www.princehotels.co.jp/ski/naeba/livecamera/gelande.jpg",
-    code: "150000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=150000"
-  },
-  hakuba: {
-    cam: "https://www.happo-one.jp/livecam/happo.jpg",
-    code: "200000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000"
-  },
-  zao: {
-    cam: "https://www.zao-ski.or.jp/livecam/zao.jpg",
-    code: "060000",
-    jma: "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=060000"
-  }
-};
-
-function update() {
-  const key = document.getElementById("spot").value;
-  if (!key) return;
-
-  const s = spots[key];
-  const img = document.getElementById("cam");
-
-  // キャッシュ回避（疑似ライブ）
-  img.src = s.cam + "?t=" + Date.now();
-
-  document.getElementById("jmaLink").href = s.jma;
-
-  fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${s.code}.json`)
-    .then(r => r.json())
-    .then(data => {
-      const a = data[0].timeSeries[0].areas[0];
-      document.getElementById("weather").innerHTML = `
-        <strong>${a.area.name}</strong><br>
-        今日：${a.weathers[0]}<br>
-        明日：${a.weathers[1]}
-      `;
-    });
-
-  // 10秒ごとに更新
-  setInterval(() => {
-    img.src = s.cam + "?t=" + Date.now();
-  }, 10000);
-}
+fetch("https://www.jma.go.jp/bosai/forecast/data/forecast/200000.json")
+  .then(r => r.json())
+  .then(d => {
+    const a = d[0].timeSeries[0].areas[0];
+    document.getElementById("weather").innerHTML =
+      `今日：${a.weathers[0]}<br>明日：${a.weathers[1]}`;
+  });
 </script>
 
 </body>
