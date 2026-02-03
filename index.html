@@ -3,13 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <title>ゲレンデ状況 × 気象庁</title>
+
 <style>
 body {
   font-family: sans-serif;
   background: #eef6fb;
   padding: 15px;
 }
-h1 { text-align: center; }
+h1 {
+  text-align: center;
+}
 .card {
   background: #fff;
   border-radius: 8px;
@@ -37,41 +40,41 @@ a.btn {
 }
 </style>
 </head>
+
 <body>
 
 <h1>🎿 ゲレンデ状況確認</h1>
 
+<!-- 白馬八方尾根 -->
 <div class="card">
   <h2>白馬八方尾根</h2>
-
-  <!-- 代替画像 -->
   <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png"
-       alt="ライブカメラ（公式サイトで確認）">
-
+       alt="公式サイトでライブカメラを確認">
   <a class="btn" href="https://www.happo-one.jp/livecam/" target="_blank">
     ▶ 公式ライブカメラを見る
   </a>
+</div>
 
-  <div class="weather" id="weather">
-    天気取得中…
-  </div>
-
-  <a class="btn" style="background:#555"
-     href="https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000"
-     target="_blank">
-    🌤 気象庁の詳細を見る
+<!-- 白馬五竜 -->
+<div class="card">
+  <h2>白馬五竜</h2>
+  <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png" alt="">
+  <a class="btn" href="https://www.hakubaescal.com/winter/livecamera/" target="_blank">
+    ▶ 公式ライブカメラを見る
   </a>
 </div>
 
-<script>
-fetch("https://www.jma.go.jp/bosai/forecast/data/forecast/200000.json")
-  .then(r => r.json())
-  .then(d => {
-    const a = d[0].timeSeries[0].areas[0];
-    document.getElementById("weather").innerHTML =
-      `今日：${a.weathers[0]}<br>明日：${a.weathers[1]}`;
-  });
-</script>
+<!-- 栂池高原 -->
+<div class="card">
+  <h2>栂池高原</h2>
+  <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png" alt="">
+  <a class="btn" href="https://www.tsugaike.gr.jp/gelande/livecamera/" target="_blank">
+    ▶ 公式ライブカメラを見る
+  </a>
+</div>
 
-</body>
-</html>
+<!-- 野沢温泉 -->
+<div class="card">
+  <h2>野沢温泉スキー場</h2>
+  <img src="https://www.jma.go.jp/bosai/forecast/img/forecast.png" alt="">
+  <a class="btn"
